@@ -1,0 +1,14 @@
+body {
+  height: 100vh;
+  padding: 2rem;
+  background: #263238;
+  color: #b0bec5;
+  line-height: 1.4;
+  display: flex;
+}
+
+body,
+code,
+textarea {
+  font-family: monospace;
+}

@@ -1,30 +1,37 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
+	"github.com/Alistair1231/ipbin/controllers"
 	"github.com/Alistair1231/ipbin/initializers"
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/template/html/v2"
 )
 
 func init() {
 	initializers.LoadEnvVars()
 	initializers.ConnectToDatabase()
+	initializers.SyncDB()
 }
 
 func main() {
-	// Initialize a new Fiber app
-	app := fiber.New()
+	engine := html.New("./views", ".html")
+	// Setup App
+	app := fiber.New(
+		fiber.Config{
+			Views: engine,
+		},
+	)
 
-	// Define a route for the GET method on the root path '/'
-	app.Get("/", func(c fiber.Ctx) error {
-		// Send a string response to the client
-		return c.SendString("Hello, World 👋!")
-	})
+	// Configure App
+	app.Static("/", "./public")
 
-	var port = fmt.Sprintf(":%s", os.Getenv("PORT"))
-	// Start the server on port 3000
+	// Routes
+	app.Get("/", controllers.GetIndex)
+
+	var port = ":" + os.Getenv("PORT")
+	// Start app
 	log.Fatal(app.Listen(port))
 }

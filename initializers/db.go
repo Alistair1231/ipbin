@@ -3,6 +3,7 @@ package initializers
 import (
 	"os"
 
+	"github.com/Alistair1231/ipbin/models"
 	"gorm.io/driver/sqlite" // Sqlite driver based on CGO
 	// "github.com/glebarez/sqlite" // Pure go SQLite driver, checkout https://github.com/glebarez/sqlite for details
 	"gorm.io/gorm"
@@ -20,4 +21,9 @@ func ConnectToDatabase() {
 	if err != nil {
 		panic("failed to connect database")
 	}
+}
+
+func SyncDB() {
+	DB.AutoMigrate(&models.Paste{})
+	DB.AutoMigrate(&models.User{})
 }
